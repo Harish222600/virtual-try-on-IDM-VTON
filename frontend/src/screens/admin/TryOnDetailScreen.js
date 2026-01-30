@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { saveImageToGallery } from '../../utils/imageSaver';
 
 const TryOnDetailScreen = ({ route, navigation }) => {
     const { tryOn } = route.params;
@@ -72,6 +73,16 @@ const TryOnDetailScreen = ({ route, navigation }) => {
                         )}
                     </View>
                 </View>
+                {tryOn.outputImageUrl && (
+                    <TouchableOpacity
+                        style={styles.saveButton}
+                        onPress={() => saveImageToGallery(tryOn.outputImageUrl)}
+                    >
+                        <Ionicons name="download-outline" size={20} color="#fff" style={{ marginRight: 8 }} />
+                        <Text style={styles.saveButtonText}>Save Output</Text>
+                    </TouchableOpacity>
+                )}
+
 
                 {/* Inputs Comparison */}
                 <View style={styles.inputsSection}>
@@ -122,7 +133,7 @@ const TryOnDetailScreen = ({ route, navigation }) => {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </SafeAreaView >
     );
 };
 
@@ -283,6 +294,20 @@ const styles = StyleSheet.create({
     errorMessage: {
         color: '#ef4444',
         fontSize: 12,
+    },
+    saveButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#10b981',
+        padding: 12,
+        borderRadius: 12,
+        marginTop: 16,
+    },
+    saveButtonText: {
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '600',
     },
 });
 

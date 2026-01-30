@@ -13,7 +13,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { tryonAPI } from '../../api';
 
-const HistoryScreen = () => {
+const HistoryScreen = ({ navigation }) => {
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -87,7 +87,10 @@ const HistoryScreen = () => {
     };
 
     const renderItem = ({ item }) => (
-        <View style={styles.historyCard}>
+        <TouchableOpacity
+            style={styles.historyCard}
+            onPress={() => navigation.navigate('TryOnDetail', { tryOn: item })}
+        >
             <View style={styles.imagesRow}>
                 <View style={styles.imageContainer}>
                     <Image source={{ uri: item.inputImageUrl }} style={styles.smallImage} />
@@ -120,7 +123,7 @@ const HistoryScreen = () => {
                     <Text style={styles.deleteIcon}>🗑️</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     if (loading) {

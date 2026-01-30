@@ -10,7 +10,16 @@ import {
     ActivityIndicator,
     RefreshControl,
     Alert,
+    Dimensions,
 } from 'react-native';
+
+const { width } = Dimensions.get('window');
+const CARD_MARGIN = 8;
+const LIST_PADDING = 12;
+// Calculate precise card width: (Screen - ListPadding*2 - CardMargins*2*NumCols) / NumCols? 
+// Actually just: (Screen - ListPadding*2) / 2 - CardMargin*2 is safer?
+// Let's do: (Screen - ListPadding*2 - (CARD_MARGIN * 4)) / 2
+const cardWidth = (width - (LIST_PADDING * 2) - (CARD_MARGIN * 4)) / 2;
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { garmentAPI, userAPI } from '../../api';
 
@@ -330,8 +339,8 @@ const styles = StyleSheet.create({
         paddingBottom: 20,
     },
     garmentCard: {
-        flex: 1,
-        margin: 8,
+        width: cardWidth,
+        margin: CARD_MARGIN,
         backgroundColor: '#1a1a2e',
         borderRadius: 16,
         overflow: 'hidden',

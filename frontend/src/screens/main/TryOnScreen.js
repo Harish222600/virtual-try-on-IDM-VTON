@@ -12,6 +12,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { tryonAPI } from '../../api';
+import { saveImageToGallery } from '../../utils/imageSaver';
 
 const TryOnScreen = ({ navigation, route }) => {
     const [personImage, setPersonImage] = useState(null);
@@ -226,6 +227,10 @@ const TryOnScreen = ({ navigation, route }) => {
 
             <TouchableOpacity style={styles.newTryOnButton} onPress={resetTryOn}>
                 <Text style={styles.newTryOnText}>🔄 Try Another</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.saveButton} onPress={() => saveImageToGallery(resultImage)}>
+                <Text style={styles.saveButtonText}>💾 Save Image</Text>
             </TouchableOpacity>
         </ScrollView>
     );
@@ -483,6 +488,18 @@ const styles = StyleSheet.create({
     },
     newTryOnText: {
         color: '#6366f1',
+        fontSize: 16,
+        fontWeight: '600',
+    },
+    saveButton: {
+        backgroundColor: '#10b981',
+        borderRadius: 12,
+        padding: 16,
+        alignItems: 'center',
+        marginBottom: 40,
+    },
+    saveButtonText: {
+        color: '#fff',
         fontSize: 16,
         fontWeight: '600',
     },
