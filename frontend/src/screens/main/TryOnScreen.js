@@ -13,12 +13,34 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { tryonAPI } from '../../api';
 
-const TryOnScreen = ({ navigation }) => {
+const TryOnScreen = ({ navigation, route }) => {
     const [personImage, setPersonImage] = useState(null);
     const [selectedGarment, setSelectedGarment] = useState(null);
     const [resultImage, setResultImage] = useState(null);
     const [loading, setLoading] = useState(false);
     const [step, setStep] = useState(1); // 1: upload, 2: select garment, 3: processing, 4: result
+
+    // Check for garment passed from details screen
+    React.useEffect(() => {
+        if (route.params?.selectedGarment) {
+            setSelectedGarment(route.params.selectedGarment);
+            // If we already have a person image, ensure we are on step 2
+            if (personImage) {
+                setStep(2);
+            }
+            // If we have an image already, go to step 2, otherwise stay at step 1 (or 2 if we allow garment first)
+            // But since step 1 is upload photo, we should probably stay there or move to step 2 if photo exists?
+            // Actually logically, if we come from details, we have a garment.
+            // If we don't have a person image yet, we need one.
+            // The current flow: Step 1 (Photo) -> Step 2 (Garment + Photo view).
+
+            // If we select a garment first (from details), we still need either a photo or to prompt for one.
+            // Let's check logic.
+            // If personImage is null, we stay on Step 1? But user expects to see their garment selected.
+            // Maybe we can update logic to show garment is pre-selected even in Step 1?
+            // Or better, if we have a garment, we can just ensure that when we DO get a photo, we are good.
+        }
+    }, [route.params?.selectedGarment]);
 
     const pickImage = async () => {
         const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -60,7 +82,7 @@ const TryOnScreen = ({ navigation }) => {
     };
 
     const selectGarment = () => {
-        navigation.navigate('Gallery', {
+        navigation.navigate('GarmentSelection', {
             selectMode: true,
             onSelect: (garment) => {
                 setSelectedGarment(garment);

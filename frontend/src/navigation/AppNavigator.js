@@ -4,6 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useAuth } from '../contexts/AuthContext';
 import { ActivityIndicator, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 // Auth Screens
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -13,6 +14,7 @@ import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 // Main Screens
 import HomeScreen from '../screens/main/HomeScreen';
 import GarmentGalleryScreen from '../screens/main/GarmentGalleryScreen';
+import GarmentDetailScreen from '../screens/main/GarmentDetailScreen';
 import TryOnScreen from '../screens/main/TryOnScreen';
 import HistoryScreen from '../screens/main/HistoryScreen';
 import ProfileScreen from '../screens/main/ProfileScreen';
@@ -21,6 +23,8 @@ import SettingsScreen from '../screens/main/SettingsScreen';
 // Admin Screens
 import AdminDashboardScreen from '../screens/admin/AdminDashboardScreen';
 import UserManagementScreen from '../screens/admin/UserManagementScreen';
+import UserDetailScreen from '../screens/admin/UserDetailScreen';
+import TryOnDetailScreen from '../screens/admin/TryOnDetailScreen';
 import GarmentManagementScreen from '../screens/admin/GarmentManagementScreen';
 
 const Stack = createNativeStackNavigator();
@@ -46,7 +50,7 @@ const MainTabs = () => {
 
     return (
         <Tab.Navigator
-            screenOptions={{
+            screenOptions={({ route }) => ({
                 headerShown: false,
                 tabBarStyle: {
                     backgroundColor: '#1a1a2e',
@@ -61,7 +65,26 @@ const MainTabs = () => {
                     fontSize: 12,
                     fontWeight: '600',
                 },
-            }}
+                tabBarIcon: ({ focused, color, size }) => {
+                    let iconName;
+
+                    if (route.name === 'Home') {
+                        iconName = focused ? 'home' : 'home-outline';
+                    } else if (route.name === 'Gallery') {
+                        iconName = focused ? 'grid' : 'grid-outline';
+                    } else if (route.name === 'TryOn') {
+                        iconName = focused ? 'shirt' : 'shirt-outline';
+                    } else if (route.name === 'History') {
+                        iconName = focused ? 'time' : 'time-outline';
+                    } else if (route.name === 'Profile') {
+                        iconName = focused ? 'person' : 'person-outline';
+                    } else if (route.name === 'Admin') {
+                        iconName = focused ? 'shield-checkmark' : 'shield-checkmark-outline';
+                    }
+
+                    return <Ionicons name={iconName} size={size} color={color} />;
+                },
+            })}
         >
             <Tab.Screen
                 name="Home"
@@ -141,9 +164,29 @@ const MainStack = () => (
             options={{ title: 'User Management' }}
         />
         <Stack.Screen
+            name="UserDetail"
+            component={UserDetailScreen}
+            options={{ title: 'User Profile' }}
+        />
+        <Stack.Screen
+            name="TryOnDetail"
+            component={TryOnDetailScreen}
+            options={{ title: 'Try-On Detail' }}
+        />
+        <Stack.Screen
             name="GarmentManagement"
             component={GarmentManagementScreen}
             options={{ title: 'Garment Management' }}
+        />
+        <Stack.Screen
+            name="GarmentSelection"
+            component={GarmentGalleryScreen}
+            options={{ title: 'Select Garment' }}
+        />
+        <Stack.Screen
+            name="GarmentDetail"
+            component={GarmentDetailScreen}
+            options={{ title: 'Garment Details' }}
         />
     </Stack.Navigator>
 );

@@ -14,7 +14,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { adminAPI } from '../../api';
 
-const UserManagementScreen = () => {
+const UserManagementScreen = ({ navigation }) => {
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
@@ -102,7 +102,10 @@ const UserManagementScreen = () => {
     };
 
     const renderUser = ({ item }) => (
-        <View style={styles.userCard}>
+        <TouchableOpacity
+            style={styles.userCard}
+            onPress={() => navigation.navigate('UserDetail', { userId: item._id, userName: item.name })}
+        >
             <View style={styles.userHeader}>
                 {item.profileImage ? (
                     <Image source={{ uri: item.profileImage }} style={styles.avatar} />
@@ -129,18 +132,24 @@ const UserManagementScreen = () => {
             <View style={styles.userActions}>
                 <TouchableOpacity
                     style={[styles.actionButton, item.isBlocked && styles.unblockButton]}
-                    onPress={() => toggleBlock(item._id)}
+                    onPress={(e) => {
+                        e.stopPropagation(); // Prevent card click
+                        toggleBlock(item._id);
+                    }}
                 >
                     <Text style={styles.actionText}>{item.isBlocked ? 'Unblock' : 'Block'}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={styles.deleteButton}
-                    onPress={() => deleteUser(item._id, item.email)}
+                    onPress={(e) => {
+                        e.stopPropagation(); // Prevent card click
+                        deleteUser(item._id, item.email);
+                    }}
                 >
                     <Text style={styles.deleteText}>Delete</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </TouchableOpacity>
     );
 
     return (

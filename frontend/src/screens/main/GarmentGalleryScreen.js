@@ -122,7 +122,7 @@ const GarmentGalleryScreen = ({ navigation, route }) => {
     const renderGarment = ({ item }) => (
         <TouchableOpacity
             style={styles.garmentCard}
-            onPress={() => selectMode ? handleSelect(item) : null}
+            onPress={() => selectMode ? handleSelect(item) : navigation.navigate('GarmentDetail', { garment: item })}
         >
             <Image source={{ uri: item.imageUrl }} style={styles.garmentImage} />
             <View style={styles.garmentInfo}>
@@ -144,11 +144,11 @@ const GarmentGalleryScreen = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>
-                    {selectMode ? 'Select a Garment' : 'Garment Gallery'}
-                </Text>
-            </View>
+            {!selectMode && (
+                <View style={styles.header}>
+                    <Text style={styles.title}>Garment Gallery</Text>
+                </View>
+            )}
 
             <View style={styles.searchContainer}>
                 <TextInput

@@ -148,7 +148,7 @@ const getUserActivity = async (req, res, next) => {
 
         const [user, tryOns, logs] = await Promise.all([
             User.findById(userId).select('-password'),
-            TryOnResult.find({ userId }).sort({ createdAt: -1 }).limit(10).populate('garmentId', 'name'),
+            TryOnResult.find({ userId }).sort({ createdAt: -1 }).limit(10).populate('garmentId', 'name imageUrl category'),
             Log.find({ userId }).sort({ createdAt: -1 }).limit(20)
         ]);
 
